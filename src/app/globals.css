@@ -1,0 +1,252 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #070809;
+  --panel: #0d0f11;
+  --panel-2: #111417;
+  --border: #1c2227;
+  --border-bright: #2a3238;
+  --text: #d9dde0;
+  --text-dim: #7a848c;
+  --text-dimmer: #4a535a;
+  --accent: #00ff9c;
+  --accent-dim: #00b870;
+  --warn: #ffb020;
+  --danger: #ff4455;
+  --info: #44aaff;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(0,255,156,0.05), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(68,170,255,0.04), transparent 40%),
+    linear-gradient(180deg, #070809 0%, #050607 100%);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0a0c0e; }
+::-webkit-scrollbar-thumb { background: #1f262b; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2d363c; }
+
+/* CRT-ish scanlines overlay — negative z-index so it never intercepts clicks */
+.scanlines::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none !important;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.012) 0px,
+    rgba(255,255,255,0.012) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: -1;
+  mix-blend-mode: overlay;
+}
+
+/* Vignette */
+.vignette::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none !important;
+  box-shadow: inset 0 0 180px rgba(0,0,0,0.75);
+  z-index: -1;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.panel-bright {
+  background: var(--panel-2);
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+}
+
+.glow {
+  box-shadow: 0 0 0 1px rgba(0,255,156,0.25), 0 0 24px rgba(0,255,156,0.08);
+}
+
+.text-accent { color: var(--accent); }
+.text-dim { color: var(--text-dim); }
+.text-dimmer { color: var(--text-dimmer); }
+.text-warn { color: var(--warn); }
+.text-danger { color: var(--danger); }
+.text-info { color: var(--info); }
+
+.border-accent { border-color: var(--accent); }
+.bg-accent { background: var(--accent); }
+
+/* Blinking cursor */
+.blink {
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink {
+  to { visibility: hidden; }
+}
+
+/* Pulse for connected dot */
+.pulse-dot {
+  position: relative;
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.25;
+  animation: pulse 1.6s ease-out infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(0.6); opacity: 0.5; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Progress bar shimmer */
+.shimmer {
+  background: linear-gradient(90deg,
+    rgba(0,255,156,0.15) 0%,
+    rgba(0,255,156,0.45) 50%,
+    rgba(0,255,156,0.15) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Ticker */
+.ticker-row {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* ASCII box */
+.ascii-box {
+  font-family: var(--mono);
+  white-space: pre;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+/* Button */
+.btn-primary {
+  background: var(--accent);
+  color: #03110b;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--accent);
+  transition: all 0.15s ease;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #2cffb0;
+  box-shadow: 0 0 24px rgba(0,255,156,0.35);
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border-bright);
+  transition: all 0.15s ease;
+}
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-tab {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 14px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.btn-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: rgba(0,255,156,0.04);
+}
+.btn-tab:hover:not(.active) {
+  color: var(--text);
+}
+
+/* Meter */
+.meter-track {
+  height: 6px;
+  background: #15191d;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+.meter-fill {
+  height: 100%;
+  transition: width 0.8s cubic-bezier(.2,.8,.2,1);
+}
+
+/* Select */
+select, input[type="text"] {
+  background: #0a0c0e;
+  border: 1px solid var(--border-bright);
+  color: var(--text);
+  font-family: var(--mono);
+  padding: 8px 10px;
+  border-radius: 4px;
+  outline: none;
+}
+select:focus, input[type="text"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(0,255,156,0.25);
+}
+
+/* Log entry */
+.log-enter {
+  animation: logIn 0.25s ease-out;
+}
+@keyframes logIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Blink fast for status */
+.rapid-blink {
+  animation: blink 0.6s steps(2, start) infinite;
+}
+
+/* Heatmap cell */
+.heat-cell {
+  transition: transform 0.15s ease;
+}
+.heat-cell:hover {
+  transform: scale(1.35);
+  z-index: 10;
+}
+
+/* No selection on chrome */
+.noselect { user-select: none; }
